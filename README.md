@@ -22,25 +22,33 @@ Go'nun son sürümü veya istenilen bir sürüm için [bu sayfayı](https://go.d
 
 ### Yükleme
 
-`wget https://go.dev/dl/go1.21.1.linux-amd64.tar.gz`
-`sudo tar -xvf https://go.dev/dl/go1.21.1.linux-amd64.tar.gz`
-`sudo mv go /usr/local`
+```
+wget https://go.dev/dl/go1.21.1.linux-amd64.tar.gz
+sudo tar -xvf https://go.dev/dl/go1.21.1.linux-amd64.tar.gz
+sudo mv go /usr/local
+```
 
 ### Ek Ayarlar
 
 İşletim sistemindeki root klasörünü gelin.
 
-`cd ~`
+```
+cd ~
+```
 
 Aşağıdaki yöntemlerden birisi ile `.bashrc` dosyasını açın.
 
 #### Windows Explorer ile
 
-`explorer.exe .`
+```
+explorer.exe .
+```
 
 #### Vim ile
 
-`vim .bashrc`
+```
+vim .bashrc
+```
 
 Ardından `.bashrc` dosyasına aşağıdaki satırları ekleyin.
 
@@ -54,4 +62,6 @@ export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 
 İstediğiniz sürümün kurulup kurulmadığını anlamak için aşadıkai komutu kullanın.
 
-`go version`
+```
+go version
+```
