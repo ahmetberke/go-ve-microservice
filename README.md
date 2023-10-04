@@ -8,7 +8,7 @@
 - [Microservice Nedir ve Monolitich ile Farkları Nelerdir]()
 - [Go ile Microservice'e Giriş]()
 - [RESTful API Microservice Geliştirme]()
-- [Microservice'te Veritabanı Kullanımı (MongoDB)]()
+- [Microservice'te Veritabanı Kullaénımı (MongoDB)]()
 - [Microservice'te Cache Mekanizması Kullanımı (Redis)]()
 - [Microservice'te Mesaj Kuyruğu Servisi Kullanımı (RabbitMQ)]()
 
