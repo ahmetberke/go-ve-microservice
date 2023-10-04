@@ -42,7 +42,7 @@ Son versiyonu indirmek için;
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```
 
-Docker Engine'in doğru kurulduğunu kontrol ediliyor;
+Docker Engine'in doğru kurulduğunu kontrol etmek için;
 
 ```
 sudo docker run hello-world
