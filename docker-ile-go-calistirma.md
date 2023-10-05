@@ -1,12 +1,13 @@
 # DOCKER İLE GO ÇALIŞTIRMA
 
 - [Docker Nedir](#docker-nedir)
-- [Docker Compose Nedir](#docker-compose-nedir)
 - [WSL2 Ubuntu'da Docker Kurulumu](#wsl2-ubuntuda-docker-kurulumu)
 - [Örnek Uygulama](#go-ile-örnek-uygulama-ayağa-kaldırma)
 - [Dockerfile Nedir, Nasıl Kullanılır](#dockerfile-nedir-nasıl-kullanılır)
 - [Build Alma](#build-alma)
-- [Çalıştırma]()
+- [Uygulamayı Çalıştırma](#uygulamayı-çalıştırma)
+- [Docker Compose Nedir](#docker-compose-nedir)
+- [Docker Compose Kullanımı](#docker-compose-kullanımı)
 
 ## Docker Nedir
 
@@ -15,12 +16,6 @@ Docker, Open Source bir **container** teknolojisidir. Docker, aynı işletim sis
 Microservice'ler için olmazsa olmaz container teknolojilerinin başında gelen Docker, microservicelerin kolay ayağa kaldırılmasını ve birbirinden izole olmasını sağlar.
 
 Docker'ı öğrenmek için [kendi dökümanından](https://docs.docker.com/) veya internette bulunan kaynaklardan yararlanabilir.
-
-## Docker Compose Nedir?
-
-Docker Compose, birden fazla containera sahip uygulamaları tanımlamak ve ayağa kaldırmak için kullanılır. Compose ile birlikte uygulamalarınızı configüre etmek veya dışarıdan ulaşılan imageleri dahil etmek için bir YAML dosyası kullanılır. Ardından sadece bir kaç komutla bu YAML dosyası kullanılarak tüm servisler yönetilir.
-
-Daha fazla bilgi almak için Docker Compose'ın [kendi dökümanınından](https://docs.docker.com/compose/) faydalanılabilir.
 
 ## WSL2 Ubuntu'da Docker Kurulumu
 
@@ -237,3 +232,96 @@ Build alınan tüm docker **image**'leri görüntülenir.
 docker image ls
 ```
 
+## Uygulamayı Çalıştırma
+
+Build alınan İmage'in doğru şekilde nasıl çalıştırılacağı anlatacağız. 
+
+Bir image'i içeren containerı çalıştırmak için `docker run` komutunu kullanırız. Bu komut parametre olarak çalıştırılacak olan image'in ismini alır.
+
+ ```
+ docker run docker-gs-ping
+ ```
+
+ Eğer bu şekilde çalıştırılacak uygulamaya bir istekte bulunursak.
+
+ ```
+ curl http://localhost:8080
+ ```
+
+ ```
+ curl: (7) Failed to connect to localhost port 8080: Connection refused
+ ```
+
+ Bu hatanın sebebi container'a verdiğimiz port uygulamanın o container içerisinden erişilebilir portudur. Fakat bizim `curl` ile attığımız istek uygulamaya contanier dışından geliyor bundan dolayı uygulama aslında container dışından bağlanılabilir değil oluyor. 
+ 
+ Bunu düzeltmek için container'ı çalıştırırken dışarıya paylaşacağı portu da belirtmek gerekiyor. `--publish` flagi ile birlikte (kısa hali `--p` dir) `[host_port]:[container-port]` verilerek uygulama yayınlanmış oluyor.
+
+```
+docker run --publish 8080:8080 docker-gs-ping
+```
+
+Tekrardan `curl` ile istek atıldığında doğru yanıtı alacağız.
+	
+## Docker Compose Nedir?
+
+Docker Compose, birden fazla containera sahip uygulamaları tanımlamak ve ayağa kaldırmak için kullanılır. Compose ile birlikte uygulamalarınızı configüre etmek veya dışarıdan ulaşılan imageleri dahil etmek için bir YAML dosyası kullanılır. Ardından sadece bir kaç komutla bu YAML dosyası kullanılarak tüm servisler yönetilir.
+
+Daha fazla bilgi almak için Docker Compose'ın [kendi dökümanınından](https://docs.docker.com/compose/) faydalanabilirsiniz.
+
+## Docker Compose Kullanımı
+
+Docker Compose kullanırken, Birden fazla uygulamanın nasıl build edileceği, yönetileceği ve çalıştırılacağını belirlemek için bir `.yaml` dosyası oluşturuyoruz.
+
+`docker-compose.yaml` olarak oluşturduğumuz dosyada ilk olarak **compose**'un versinunu belirliyoruz.
+
+```yaml
+version: "3.9"	
+```
+
+Tanımlanacak servisleri `services` karşısında bir liste olarak tanımlıyoruz. Biz burada kendi servisimizi `go-app` tagi ile tanımlayacağız.
+
+Ardından bu servisin nasıl build edileceğini `build` tagi ile tanımlıyoruz. `build`in içerisinde `dockerfile` ile **Dockerfile** dosyazımızın ismimi, `context` ile de proje klasörünün uzantısını belirliyoruz.
+
+```yaml
+services:
+  go-app:
+    build:
+      dockerfile: Dockerfile
+      context: .
+```
+
+Container'ın dışarıya hangi **port**'tan paylaşılacağını `ports` ile belirliyoruz.
+
+```yaml
+services:
+  go-app:
+    ...
+    ports:
+      - "8080:8080"
+```
+
+**Container**'ın üzerinde bulunan dosyaları saklayacağımız uzantıyı `volumes` ile belirliyoruz.
+
+```yaml
+services:
+  go-app:
+	  ...
+    volumes:
+      - .:/opt/app/api
+```
+
+**Compose** dosyamızın tamamı aşağıdadır;
+
+```yaml
+version: "3.9"
+
+services:
+  go-app:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/opt/app/api
+```
