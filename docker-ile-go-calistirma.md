@@ -325,3 +325,21 @@ services:
     volumes:
       - .:/opt/app/api
 ```
+
+Oluşturduğumuz **Compose** dosyasını kullanarak, `docker compose` komutunun uzantıları ile uygulamamızı kolaylıkla ayağa kaldırabiliriz.
+
+Öncelikle uygulamamızı build etmek için
+
+```
+docker compose build
+```
+
+komutunu kullanıyoruz.
+
+Çalıştırmak için veya build edip direkt çalıştırmak için `up` komutu kullanıyoruz.
+
+```
+docker compose up
+```
+
+Docker Compose hakkında daha fazlasını öğrenmek için dökümanını inceleyebilirsiniz.
