@@ -3,7 +3,10 @@
 - [Docker Nedir](#docker-nedir)
 - [Docker Compose Nedir](#docker-compose-nedir)
 - [WSL2 Ubuntu'da Docker Kurulumu](#wsl2-ubuntuda-docker-kurulumu)
-- [Go İle Örnek Uygulama](#go-ile-örnek-uygulama-ayağa-kaldırma)
+- [Örnek Uygulama](#go-ile-örnek-uygulama-ayağa-kaldırma)
+- [Dockerfile Nedir, Nasıl Kullanılır](#dockerfile-nedir-nasıl-kullanılır)
+- [Build Alma](#build-alma)
+- [Çalıştırma]()
 
 ## Docker Nedir
 
@@ -11,13 +14,13 @@ Docker, Open Source bir **container** teknolojisidir. Docker, aynı işletim sis
 
 Microservice'ler için olmazsa olmaz container teknolojilerinin başında gelen Docker, microservicelerin kolay ayağa kaldırılmasını ve birbirinden izole olmasını sağlar.
 
-Docker'ı öğrenmek için [kendi dökümanından](https://docs.docker.com/) veya internette bulunan kaynaklardan yararlanabilirsiniz.
+Docker'ı öğrenmek için [kendi dökümanından](https://docs.docker.com/) veya internette bulunan kaynaklardan yararlanabilir.
 
 ## Docker Compose Nedir?
 
 Docker Compose, birden fazla containera sahip uygulamaları tanımlamak ve ayağa kaldırmak için kullanılır. Compose ile birlikte uygulamalarınızı configüre etmek veya dışarıdan ulaşılan imageleri dahil etmek için bir YAML dosyası kullanılır. Ardından sadece bir kaç komutla bu YAML dosyası kullanılarak tüm servisler yönetilir.
 
-Daha fazla bilgi almak için Docker Compose'ın [kendi dökümanını](https://docs.docker.com/compose/) okuyabilirsiniz.
+Daha fazla bilgi almak için Docker Compose'ın [kendi dökümanınından](https://docs.docker.com/compose/) faydalanılabilir.
 
 ## WSL2 Ubuntu'da Docker Kurulumu
 
@@ -61,7 +64,7 @@ Aşağıdaki Örnek **echo** frameworkü kullananan bir "hello-world" API'dir.
 
 Bu uygulama `PORT` olarak tanımlanan ortam değişkenini TCP Port olarak kullanmaktadır. Eğer herhangi bir yoksa varsayılan olarak `8080` portu dinlenmektedir.
 
-Aşağıdaki uygulamayı git ile klonlayarak `go/src/github.com/user/` dizinimize çekiyoruz.
+Aşağıdaki uygulamayı git ile klonlayarak `go/src/github.com/user/` dizinine klonlanır.
 
 ```
 git clone https://github.com/docker/docker-gs-ping
@@ -113,13 +116,13 @@ func IntMin(a, b int) int {
 
 ### Uygulama'nın Çalışma Testi
 
-Docker ile uygulamayı ayağı kaldırmadan önce doğru çalıştığını go ile test ediyoruz.
+Docker ile uygulamayı ayağı kaldırmadan önce doğru çalıştığı go ile test edilir.
 
 ```
 go run main.go
 ```
 
-Uygulama çalıştıktan sonra başka bir terminal açıp aşağıdaki komutla birlikte uygulama bir istekte bulunuyoruz.
+Uygulama çalıştıktan sonra başka bir terminal açıp aşağıdaki komutla birlikte uygulamaya bir istekte bulunulur.
 
 ```
 curl localhost:8080
@@ -131,54 +134,59 @@ Dönüt:
 Hello, Docker <3
 ```
 
-### Docker ile Ayağa Kaldırma
+## Dockerfile Nedir Nasıl Kullanılır
 
-Uygulamayı Docker ile ayağa kaldırmak için öncelikle uygulama dizinin bir `Dockerfile` dosyası oluşturuyoruz. Eğer klonla birlikte zaten gelmişse süreç açısından o dosyayı silip tekrardan yeni bir `Dockerfile` dosyası oluşturunuz.
+Dockerfile,belli bir image görüntüsü oluşturmak için var olan tüm **katmanların** açıklandığı **uzantısı olmayan dosyadır.** Dockerfile içerisinde hangi Image’ın kullanılacağı, hangi dosyaları içereceği ve hangi uygulamanın hangi parametrelerle çalışacağı yazılır. Docker, Dockerfile dosyasında bulunan komutları sırayla tek tek çalıştırır. Her komut yeni bir katman oluşturur. Docker **build** sonunda elimizde uygulaması ait Docker Image oluşur .Docker Image container oluşturarak uygulaması ayağa kaldırabiliriz. Bilinmesi gereken en önemli nokta ise dosya adının kesinlikle Dockerfile şeklinde olmasıdır. “dockerfile”, “DockerFile” gibi verilen isimlendirmeler yanlıştır.
 
-Kullanılacak Image ve versiyonu belirleniyor. Localde kullandığınız versiyon ile docker'a verdiğiniz versiyonun aynı olması önemli.
+Aşağıda Dockerfile'ın nasıl kullanılacağı, yukarıdaki örnek üzerinden anlatılmıştır.
+
+Uygulamayı Docker ile ayağa kaldırmak için öncelikle uygulama dizinin bir `Dockerfile` dosyası oluşturulur. Eğer klonla birlikte zaten gelmişse süreç açısından o dosyayı silip tekrardan oluşturulur.
+
+Kullanılacak Image ve versiyonu belirlenir. Localde kullanılan versiyon ile docker'a verilen versiyonun aynı olması önemlidi
+r.
 
 ``` Dockerfile
 FROM golang:1.21
 ```
 
-Projenin çalıştırılacağı ortam için bir klasör tanımı yapılıyor.
+Projenin çalıştırılacağı ortam için bir klasör tanımı yapılır.
 
 ```Dockerfile
 WORKDIR /app
 ```
 
-Go Modüllerini barındıran `go.mod` ve `go.sum` dosyaları uygulama klasörüne eklenip indiriliyor.
+Go Modüllerini barındıran `go.mod` ve `go.sum` dosyaları uygulama klasörüne eklenip indirilir.
 
 ```Dockerfile
 COPY go.mod go.sum
 RUN go mod download
 ```
 
-Kaynak kodun tamamı uygulama klasörüne kopyalanıyor
+Kaynak kodun tamamı uygulama klasörüne kopyalanır.
 
 ```Dockerfile
 COPY *.go ./
 ```
 
-Uygulamanın çalıştırılabilir hale gelmesi için build alınıyor.
+Uygulamanın çalıştırılabilir hale gelmesi için build alınır.
 
 ```Dockerfile
 RUN CGO_ENABLED=0 GOOS=linux go build -o /docker-gs-ping
 ```
 
-Uygulamanın tespit etmesi için TCP Port'u `PORT` adında ortam değişkeni olarak tanımlanıyor.
+Uygulamanın tespit etmesi için TCP Port'u `PORT` adında ortam değişkeni olarak tanımlanır.
 
 ```Dockerfile
 EXPOSE 8080
 ```
 
-Uygulama çalıştırılıyor.
+Uygulama çalıştırılır.
 
 ```Dockerfile
 CMD ["/docker-gs-ping"]
 ```
 
-Dockerfile'ın tamamı aşağıdaki gibi
+**Dockerfile**'ın tamamı aşağıdaki gibidir
 
 ```Dockerfile
 # syntax=docker/dockerfile:1
@@ -210,10 +218,10 @@ EXPOSE 8080
 CMD ["/docker-gs-ping"]
 ```
 
-#### Image'i Build Alma
+## Build Alma
 
-Hazırlanan `Dockerfile`'a göre uygulamayı build ediyoruz.
-Build için `docker build` komutu kullanılır. Bu komut parametre olarak `Dockerfile`'nin bulunduğu klasörü alır. `Dockerfile` tespitini otomatik yaparak uygulamayı build eder.
+Hazırlanan `Dockerfile`'a göre uygulama build edilir.
+Build için `docker build` komutu kullanılır. Bu komut parametre olarak `Dockerfile`'nin bulunduğu klasörü baz alıp `Dockerfile` tespitini otomatik yaparak uygulamayı build eder.
 
 Opsiyonel olarak aldınan builde bir isim/tag vermek için `--tag` flag'i kullanılır.
 
@@ -221,10 +229,11 @@ Opsiyonel olarak aldınan builde bir isim/tag vermek için `--tag` flag'i kullan
 docker build --tag docker-gs-ping .
 ```
 
-#### Local Image'leri Görüntüleme
+### Local Image'leri Görüntüleme
 
-Build aldığınız tüm docker image'lerini görüntüleyebilirsiniz.
+Build alınan tüm docker **image**'leri görüntülenir.
 
 ```
 docker image ls
 ```
+
