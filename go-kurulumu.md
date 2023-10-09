@@ -1,6 +1,6 @@
 # GO KURULUMU
 
-Go'nun son sürümü veya istenilen bir sürüm için [bu sayfayı](https://go.dev/dl/) ziyaret edilebilir. 
+Go'nun son sürümü veya istenilen bir sürüm için [bu sayfayı](https://go.dev/dl/) ziyaret edebilirsiniz. 
 
 ## Yükleme
 
@@ -12,13 +12,13 @@ sudo mv go /usr/local
 
 ## Ek Ayarlar
 
-İşletim sistemindeki root klasörüne gelinir.
+İşletim sistemindeki root klasörüne gelin.
 
 ```
 cd ~
 ```
 
-Aşağıdaki yöntemlerden birisi ile `.bashrc` dosyasını açılır.
+Aşağıdaki yöntemlerden birisi ile `.bashrc` dosyasını açın.
 
 ### Windows Explorer ile
 
@@ -32,7 +32,7 @@ explorer.exe .
 vim .bashrc
 ```
 
-Ardından `.bashrc` dosyasına aşağıdaki satırları eklenir.
+Ardından `.bashrc` dosyasına aşağıdaki satırları ekleyin.
 
 ```
 export GOROOT=/usr/local/go
@@ -40,11 +40,11 @@ export GOPATH=$HOME/go
 export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 ```
 
-Burada `GOPATH` olarak yapılan tanım Go programlarının ayağa kaldırılacağı Go Geliştirme ortamı belirtilir.
+Burada `GOPATH` olarak yapılan tanım ile Go programlarının ayağa kaldırılacağı Go Geliştirme ortamı belirtilir.
 
 ## Kurulum ve Versiyon kontrolü
 
-İstenilen sürümün kurulup kurulmadığını anlamak için aşağıdaki komutu kullanılır.
+İstenilen sürümün kurulup kurulmadığını anlamak için aşağıdaki komutu kullanabilirsiniz.
 
 ```
 go version
