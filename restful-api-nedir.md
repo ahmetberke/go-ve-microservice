@@ -74,6 +74,7 @@ Rest API kavramını daha iyi anlamak için, sadece URL adreslerini, bu adresler
 
 Todo Objesinin sunucu veya bir veritabanında tutulduğunu farzedelim. Bu objenin aşağıdaki gibi özellikleri olacaktır;
 
+- **ID** : Todo'nun eşsiz kimliğini (ID) tutar, tipi ***number'dır***
 - **Title** : Todo'nun başlığını tutar, tipi ***string'tir.***
 - **Content** : Todo'nun detaylarını tutar, tipi ***string'tir.***
 - **IsDone** : Todo'nun yapılıp yapılmadığını tutar, tipi ***boolean'dir.***
@@ -82,10 +83,33 @@ Sunucunun **POST** methodu için kabul edeceği JSON objesi aşağıdaki gibi ol
 
 ```json
 {
-  title : string,
-  content : string,
-  is_done : boolean
+  "title" : "string",
+  "content" : "string",
+}
+```
+
+Sunucudan dönen cevaplar aşağıdaki gibi olmalıdır.
+**status** alanı sunucudan dönen cevabın durumunu belirler. **message** alanı ise sunucudan bir mesaj döndüyse bu mesajı tutar.
+
+```json
+{
+  "status" : "success|fail|error",
+  "message" : "string",
+  "data" : {
+    "id" : "number",
+    "title" : "string",
+    "content" : "string",
+    "is_done" : "boolean"
+  }
 }
 ```
 
 Bu API'nin tüm url adresleri ve işlevleri aşağıdaki tablodaki gibi olmalıdır.
+
+|URL|Method|İşlev|
+|---|------|-----|
+|/todo|GET|Sunucuda veya veritabanında bulunan tüm **todo**'ların listesinin döndürülmesini sağlar.|
+|/todo/{id}|GET|**ID** kullanılarak belirli bir öbjenin döndürülmesini sağlar.|
+|/todo|POST|Yeni bir todo objesinin oluşturulmasını sağlar. Gönderilen isteğin **body**'sinde Todo'nun JSON Objesi bulunmalıdır.|
+|/todo/{id}|DELETE|**ID** kullanılarak belirli bir objenin sunucudan veya veritabanından silinmesini sağlar.|
+|/todo/{id}|PATCH|**ID** kullanılarak belirli bir objenin güncelleştirilmesini sağlar. **body** içerisinde objenin yeni alanları yer almalıdır.|
