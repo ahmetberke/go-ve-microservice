@@ -4,7 +4,7 @@
 - [REST API Nasıl Çalışır?](#rest-api-nasil-çalişir)
 - [REST API ile Kimlik Doğrulama](#rest-api-i̇le-ki̇mli̇k-doğrulama)
 - [REST API İlkeleri](#rest-api-i̇lkeleri̇)
-- [Örnek REST API Tasarımı]()
+- [Örnek REST API Tasarımı](#örnek-rest-api-tasarimi)
 
 ## REST API NEDİR?
 
